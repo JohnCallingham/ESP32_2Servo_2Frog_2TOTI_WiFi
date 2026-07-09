@@ -23,9 +23,10 @@ To be completed.
 
 ## Software components
 This software uses the following components;-
+- OpenLCB_Single_Thread. See https://github.com/openlcb/OpenLCB_Single_Thread
 - ESP32WiFiGC. See https://github.com/JohnCallingham/ESP32WiFiGC
 - LCC_Servo. See https://github.com/JohnCallingham/LCC_SERVO
 - LCC_Crossover. See https://github.com/JohnCallingham/LCC_CROSSOVER
 - LCC_Frog. See https://github.com/JohnCallingham/LCC_FROG
 - LCC_TOTI. See https://github.com/JohnCallingham/LCC_TOTI
-
+- LCC_CONFIGURATION. See https://github.com/JohnCallingham/LCC_CONFIGURATION
