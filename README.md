@@ -69,7 +69,7 @@ This is a program to create an OpenLCB/LCC node. It was developed using Platform
 
 
 ## Software components
-This software uses the following components;-
+This program uses the following software components;-
 - OpenLCB_Single_Thread. See https://github.com/openlcb/OpenLCB_Single_Thread
 - ESP32WiFiGC. See https://github.com/JohnCallingham/ESP32WiFiGC
 - LCC_Servo. See https://github.com/JohnCallingham/LCC_SERVO
@@ -77,3 +77,12 @@ This software uses the following components;-
 - LCC_Frog. See https://github.com/JohnCallingham/LCC_FROG
 - LCC_TOTI. See https://github.com/JohnCallingham/LCC_TOTI
 - LCC_CONFIGURATION. See https://github.com/JohnCallingham/LCC_CONFIGURATION
+
+The following software components are dependencies of one or more of the above components;-
+ - ArduinoJson. See [bblanchon/ArduinoJson@^7.4.1](https://github.com/bblanchon/ArduinoJson)
+ - DEBOUNCE. See https://github.com/JohnCallingham/DEBOUNCE
+ - HW_MUTEX. See https://github.com/JohnCallingham/HW_MUTEX
+ - LCC_NODE_COMPONENT_BASE. See https://github.com/JohnCallingham/LCC_NODE_COMPONENT_BASE
+ - SERVO_EASING. See https://github.com/JohnCallingham/SERVO_EASING
+
+ The PlatformIO Library Dependency Finder handles downloading all dependencies.
