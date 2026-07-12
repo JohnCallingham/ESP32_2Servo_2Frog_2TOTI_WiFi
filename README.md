@@ -6,11 +6,11 @@ This is a program to create an OpenLCB/LCC node. It was developed using Platform
 
 1. Allows two servos to be connected.
 2. Provides frog switching for both servos.
-3. Provides TOTI functionality for both frogs.
+3. Provides TOTI (Train On Track Indication) functionality for both frogs.
 4. Allows the two servos to operate as a crossover.
-5. Allows the onboard LED to be configured to indicate various events.
+5. Allows the onboard RGB LED to be configured to indicate various events.
 6. Allows for testing cycles to be started by the user.
-7. Allows for remote configuration and software updates.
+7. Allows for remote configuration and remote software updates.
 
 ## Detailed functionality
 
@@ -26,7 +26,7 @@ This is a program to create an OpenLCB/LCC node. It was developed using Platform
     - the state of each of the servos (Thrown or Closed)
     - the state of the crossover (Thrown or Closed)
     - the state of each frog (connected to J or K)
-    - the state of each TOTI
+    - the state of each TOTI (occupied or not occupied)
 9. Allows a user configurable speed which applies to both servos. This is specified as the number of milli seconds delay between each degree of servo movement.
 10. Allows for three positions for each servo (Thrown, Mid and Closed).
 10. Allows the user to configure one of the three positions to be the initial position.
@@ -39,7 +39,7 @@ This is a program to create an OpenLCB/LCC node. It was developed using Platform
     - sends an event when that position has been left
 13. Each servo responds to an event which will move the servo to the other end position
 14. Each servo responds to an event which will unlock the servo.
-15. An event is sent if the servo is locked and an conditional move event is received.
+15. An event is sent if the servo is locked and a conditional move event is received.
 16. Allows for two positions for the crossover (Thrown and Closed).
 17. For each of the two positions for the crossover;-
     - responds to an event which will move both servos to that position
