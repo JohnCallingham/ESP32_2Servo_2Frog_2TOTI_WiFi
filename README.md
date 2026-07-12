@@ -10,6 +10,7 @@ This is a program to create an OpenLCB/LCC node. It was developed using Platform
 4. Allows the two servos to operate as a crossover.
 5. Allows the onboard LED to be configured to indicate various events.
 6. Allows for testing cycles to be started by the user.
+7. Allows for remote configuration and software updates.
 
 ## Detailed functionality
 
