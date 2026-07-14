@@ -60,8 +60,8 @@ This is a program to create an OpenLCB/LCC node. It was developed using Platform
     - crossover continously moves both servos between Thrown and Closed
     - frog 1 continously connects frog 1 to J, then disconnects from J, connects to K, then disconnects from K
     - frog 2 continously connects frog 2 to J, then disconnects from J, connects to K, then disconnects from K
-    - TOTI 1 continously toggles the test pin (D3) high, then low. If the test pin is connected to the TOTI 1 input pin (D0) then occupied and not occupied events will be continously sent.
-    - TOTI 2 continously toggles the test pin (D2) high, then low. If the test pin is connected to the TOTI 2 input pin (D1) then occupied and not occupied events will be continously sent.
+    - continously toggles the TOTI 1 test pin (D3) high, then low. If the test pin is connected to the TOTI 1 input pin (D0) then occupied and not occupied events will be continously sent.
+    - continously toggles the TOTI 1 test pin (D2) high, then low. If the test pin is connected to the TOTI 2 input pin (D1) then occupied and not occupied events will be continously sent.
 24. All the test cycles can be stopped by the user sending a specific event to the node.
 
 
