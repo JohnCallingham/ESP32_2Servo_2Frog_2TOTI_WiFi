@@ -8,13 +8,20 @@ It is part of a group of node types which use the same codebase. The other node 
 
 ## General functionality
 
+All of the node types which share the common codebase provide the following functionality;-
+- Responds to consumed events and sends produced events, depending on the specific features of the node.
+- When initially connected to JMRI's LCC hub the node sends the state of all events so that JMRI knows the current state of the node.
+- Responds to queries from JMRI.
+- Allows the user to configure the ESP32's built in RGB LED to indicate various states of the node.
+- Allows the user to start various testing cycles for the node.
+- Allows for remote configuration and remote firmware updates.
+
+## Specific functionality for this node type
+
 1. Allows two servos to be connected.
 2. Provides frog switching for both servos.
 3. Provides TOTI (Train On Track Indication) functionality for both frogs.
 4. Allows the two servos to operate as a crossover.
-5. Allows the onboard RGB LED to be configured to indicate various events.
-6. Allows for testing cycles to be started by the user.
-7. Allows for remote configuration and remote software updates.
 
 ## Detailed functionality
 
