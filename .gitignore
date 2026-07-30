@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .pio
 .vscode
 include
@@ -9,3 +10,6 @@ credential*.*
 Configurations.json
 *.txt
 .gitignore
+=======
+
+>>>>>>> 6d272e9d15c87b7c361e73e93ecd4174bff15572
