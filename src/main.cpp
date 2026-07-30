@@ -19,7 +19,8 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include "credentials.h"
-#include "ESP32WiFiGC_V2.h"
+// #include "ESP32WiFiGC_V2.h"
+#include "ESP32WiFiGC_V3.h"
 #include "servo_lcc.h"
 #include "frog.h"
 #include "TOTI.h"
@@ -36,7 +37,7 @@
 //   char displayMemory[100];
 // #endif
 
-#define DEBUG Serial
+// #define DEBUG Serial
 #define NOCAN
 
 // Board definitions
