@@ -24,7 +24,6 @@
 #include "frog.h"
 #include "TOTI.h"
 #include "crossover.h"
-#include "tof_sensor.h"
 #include "configurationOTA.h"
 #include "configurationPreferences.h"
 
