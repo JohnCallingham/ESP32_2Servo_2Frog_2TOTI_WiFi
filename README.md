@@ -71,10 +71,9 @@ All of the node types which share the common codebase provide the following func
     - crossover continously moves both servos between Thrown and Closed
     - frog 1 continously connects frog 1 to J, then disconnects from J, connects to K, then disconnects from K
     - frog 2 continously connects frog 2 to J, then disconnects from J, connects to K, then disconnects from K
-    - continously toggles the TOTI 1 test pin (D3) high, then low. If the test pin is connected to the TOTI 1 input pin (D0) then occupied and not occupied events will be continously sent.
-    - continously toggles the TOTI 2 test pin (D2) high, then low. If the test pin is connected to the TOTI 2 input pin (D1) then occupied and not occupied events will be continously sent.
+    - continously toggles the TOTI 1 test pin (D3, physical pin 21) high, then low. If the test pin is connected to the TOTI 1 input pin (D0, physical pin 17) then occupied and not occupied events will be continously sent.
+    - continously toggles the TOTI 2 test pin (D2, physical pin 11) high, then low. If the test pin is connected to the TOTI 2 input pin (D1, physical pin 15) then occupied and not occupied events will be continously sent.
 24. All the test cycles can be stopped by the user sending a specific event to the node.
-
 
 
 

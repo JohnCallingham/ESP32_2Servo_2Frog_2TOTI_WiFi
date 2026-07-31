@@ -570,7 +570,7 @@ uint8_t userState(uint16_t index) {
   enum evStates { VALID=4, INVALID=5, UNKNOWN=7 };
   uint8_t retVal = evStates::UNKNOWN;
 
-  Serial.printf("\n%6ld In userState() for event index = 0x%02X, ", millis(), index);
+  Serial.printf("\n%6ld In userState() for event index = 0x%02X, returning ", millis(), index);
 
   // Determine if a Servo object has this event index.
   for (uint8_t i=0; i<NUM_SERVO; i++) {
@@ -606,19 +606,18 @@ uint8_t userState(uint16_t index) {
     }
   }
 
-  switch (retVal)
-  {
-  case evStates::VALID:
-    Serial.print("returning VALID");
-    break;
-  
-  case evStates::INVALID:
-    Serial.print("returning INVALID");
-    break;
-  
-  case evStates::UNKNOWN:
-    Serial.print("returning UNKNOWN");
-    break;
+  switch (retVal) {
+    case evStates::VALID:
+      Serial.print("VALID");
+      break;
+    
+    case evStates::INVALID:
+      Serial.print("INVALID");
+      break;
+    
+    case evStates::UNKNOWN:
+      Serial.print("UNKNOWN");
+      break;
   }
   return retVal;
 }
@@ -627,16 +626,16 @@ uint8_t userState(uint16_t index) {
 void pceCallback(uint16_t index) {
   // Invoked when an event is consumed; drive pins as needed
   // from index of all events.
-  Serial.printf("\npceCallback() called with index=0x%02X", index);
+  Serial.printf("\n%6ld pceCallback() called with index=0x%02X", millis(), index);
 
   // Determine if this event index is for one of the Servo objects.
   for (uint8_t i=0; i<NUM_SERVO; i++) {
     if (servo[i]->eventIndexMatches(index)) {
       // This Servo object has this event index.
-      Serial.printf("\nindex 0x%02X belongs to servo %d", index, i);
+      Serial.printf("\n%6ld index 0x%02X belongs to servo %d", index, millis(), i);
 
       // Drive the servo as required.
-      Serial.printf("\ncalling eventReceived()");
+      // Serial.printf("\ncalling eventReceived()");
       servo[i]->eventReceived(index);
     }
   }
@@ -644,7 +643,7 @@ void pceCallback(uint16_t index) {
   // Determine if this event index is for the Crossover object.
   if (crossover.eventIndexMatches(index)) {
     // The Crossover object has this event index.
-    Serial.printf("\nindex 0x%02X belongs to the crossover", index);
+    Serial.printf("\n%6ld index 0x%02X belongs to the crossover", millis(), index);
 
     // Drive the crossover as required.
     crossover.eventReceived(index);
@@ -654,7 +653,7 @@ void pceCallback(uint16_t index) {
   for (uint8_t i=0; i<NUM_FROG; i++) {
     if (frog[i]->eventIndexMatches(index)) {
       // This Frog object has this event index.
-      Serial.printf("\nindex 0x%02X belongs to frog %d", index, i);
+      Serial.printf("\n%6ld index 0x%02X belongs to frog %d", millis(), index, i);
 
       // Set the frog's pins as required.
       frog[i]->eventReceived(index);
@@ -666,7 +665,7 @@ void pceCallback(uint16_t index) {
   for (uint8_t i=0; i<NUM_TOTI; i++) {
     if (toti[i]->eventIndexMatches(index)) {
       // This TOTI object has this event index.
-      Serial.printf("\nindex 0x%02X belongs to TOTI %d", index, i);
+      Serial.printf("\n%6ld index 0x%02X belongs to TOTI %d", millis(), index, i);
 
       // Only used for the test start and test stop events.
       toti[i]->eventReceived(index);
@@ -908,6 +907,7 @@ void initialiseFrogs() {
 
   // Initialise all Frog objects.
   for (uint8_t i=0; i<NUM_FROG; i++) {
+    frog[i]->initialise();
     frog[i]->setDelaymS(100); // The time that both J and K are disconnected when changing from one to the other.
     frog[i]->setEvents(FROG_EVENT_BASE + (i*4) + 0,
                       FROG_EVENT_BASE + (i*4) + 1,
