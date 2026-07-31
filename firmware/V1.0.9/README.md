@@ -1,3 +1,3 @@
-## V1.0.
+## V1.0.9
 
 Updated to use ESP32WiFiGC_V3.h
