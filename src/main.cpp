@@ -566,29 +566,34 @@ void userInitAll()
 /**
  * userState() is called when JMRI queries the state of an event index.
  */
-enum evStates { VALID=4, INVALID=5, UNKNOWN=7 };
 uint8_t userState(uint16_t index) {
-  Serial.printf("\n%6ld In userState() for event index = 0x%02X", millis(), index);
+  enum evStates { VALID=4, INVALID=5, UNKNOWN=7 };
+  uint8_t retVal = evStates::UNKNOWN;
+
+  Serial.printf("\n%6ld In userState() for event index = 0x%02X, ", millis(), index);
 
   // Determine if a Servo object has this event index.
   for (uint8_t i=0; i<NUM_SERVO; i++) {
     if (servo[i]->eventIndexMatches(index)) {
       // This servo has this event index.
-      return servo[i]->eventIndexMatchesCurrentState(index) ? VALID : INVALID;
+      // return servo[i]->eventIndexMatchesCurrentState(index) ? VALID : INVALID;
+      retVal = servo[i]->eventIndexMatchesCurrentState(index) ? VALID : INVALID;
     }
   }
 
   // Determine if the Crossover object has this event index.
   if (crossover.eventIndexMatches(index)) {
     // The crossover object has this event index.
-    return crossover.eventIndexMatchesCurrentState(index) ? VALID : INVALID;
+    // return crossover.eventIndexMatchesCurrentState(index) ? VALID : INVALID;
+    retVal = crossover.eventIndexMatchesCurrentState(index) ? VALID : INVALID;
   }
 
   // Determine if a Frog object has this event index.
   for (uint8_t i=0; i<NUM_FROG; i++) {
     if (frog[i]->eventIndexMatches(index)) {
       // This Frog object has this event index.
-      return frog[i]->eventIndexMatchesCurrentState(index) ? VALID : INVALID;
+      // return frog[i]->eventIndexMatchesCurrentState(index) ? VALID : INVALID;
+      retVal = frog[i]->eventIndexMatchesCurrentState(index) ? VALID : INVALID;
     }
   }
 
@@ -596,11 +601,26 @@ uint8_t userState(uint16_t index) {
   for (uint8_t i=0; i<NUM_TOTI; i++) {
     if (toti[i]->eventIndexMatches(index)) {
       // This TOTI object has this event index.
-      return toti[i]->eventIndexMatchesCurrentState(index) ? VALID : INVALID;
+      // return toti[i]->eventIndexMatchesCurrentState(index) ? VALID : INVALID;
+      retVal = toti[i]->eventIndexMatchesCurrentState(index) ? VALID : INVALID;
     }
   }
 
-  return UNKNOWN; // In case index is not recognised.
+  switch (retVal)
+  {
+  case evStates::VALID:
+    Serial.print("returning VALID");
+    break;
+  
+  case evStates::INVALID:
+    Serial.print("returning INVALID");
+    break;
+  
+  case evStates::UNKNOWN:
+    Serial.print("returning UNKNOWN");
+    break;
+  }
+  return retVal;
 }
 
 // ===== Process Consumer-eventIDs =====
