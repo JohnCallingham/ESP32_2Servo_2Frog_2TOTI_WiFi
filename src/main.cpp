@@ -632,7 +632,7 @@ void pceCallback(uint16_t index) {
   for (uint8_t i=0; i<NUM_SERVO; i++) {
     if (servo[i]->eventIndexMatches(index)) {
       // This Servo object has this event index.
-      Serial.printf("\n%6ld index 0x%02X belongs to servo %d", index, millis(), i);
+      Serial.printf("\n%6ld index 0x%02X belongs to servo %d", millis(), index, i);
 
       // Drive the servo as required.
       // Serial.printf("\ncalling eventReceived()");
