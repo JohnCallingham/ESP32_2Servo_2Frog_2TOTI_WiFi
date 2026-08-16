@@ -128,6 +128,7 @@ bool ledConfigHubConnected = false;
 //void initialiseServos();
 void updateServos();
 uint8_t getLEDState(int switchInput);
+void logMessageCallbackFunction(const char* format, ...);
 
 /**
  * Configure servos.
@@ -792,36 +793,6 @@ void initialiseServos() {
     // servo[i]->updateDelaymS((long) NODECONFIG.read(EEADDR(delaymS)));
     servo[i]->updateDelaymS((long) NODECONFIG.read16(EEADDR(delaymS)));
 
-    // for (uint8_t j=0; j<NUM_POS; j++) {
-    //   servo[i]->addPosition(
-    //         j,
-    //         "", // to be changed.
-    //         NODECONFIG.read(EEADDR(servos[i].pos[j].pos)),
-    //         SERVO_EVENT_BASE + (i*10) + (j*3) + 0,
-    //         0,
-    //         SERVO_EVENT_BASE + (i*10) + (j*3) + 2,
-    //         SERVO_EVENT_BASE + (i*10) + (j*3) + 1);
-    //   servo[i]->setEventToggle(SERVO_EVENT_BASE + (i*10) + 9);
-    // }
-
-    // for (uint8_t j=0; j<NUM_POS; j++) {
-    //   servo[i]->addPosition(
-    //         j,
-    //         "", // to be changed.
-    //         NODECONFIG.read(EEADDR(servos[i].pos[j].pos)),
-    //         // 4 events per position
-    //         // 3 positions = 12 events
-    //         // Add one for the servo toggle
-    //         // Total of 13 events per servo
-    //         SERVO_EVENT_BASE + (i*13) + (j*4) + 0,
-    //         SERVO_EVENT_BASE + (i*13) + (j*4) + 1,
-    //         // SERVO_EVENT_BASE + (i*13) + (j*4) + 3,
-    //         // SERVO_EVENT_BASE + (i*13) + (j*4) + 2);
-    //         SERVO_EVENT_BASE + (i*13) + (j*4) + 2,
-    //         SERVO_EVENT_BASE + (i*13) + (j*4) + 3);
-    //   servo[i]->setEventToggle(SERVO_EVENT_BASE + (i*13) + 12);
-    // }
-
     for (uint8_t j=0; j<NUM_POS; j++) {
       servo[i]->addPosition(
             j,
@@ -853,6 +824,9 @@ void initialiseServos() {
 
     // Set the call back functions for all reached event sending.
     servo[i]->servoEasing.setReachedAngleCallbackFunction(reachedAngleCallbackFunction);
+
+    // Set the call back functions for all log message sending.
+    servo[i]->setLogMessageCallbackFunction(logMessageCallbackFunction);
 
     servo[i]->setTestStopEventIndex(TEST_EVENT_STOP);
 
@@ -981,6 +955,57 @@ NodeID nodeid;
 // The following #include needs nodeid to be already declared.
 #include "OpenLCBMid.h"   // Essential - do not move or delete
 
+/**
+ * Telnet callback functions.
+ */
+void logMessageCallbackFunction(const char* format, ...) {
+  char logMessageBuffer[200];
+
+  // Format the log message using the provided format and arguments.
+  va_list argptr;
+  va_start(argptr, format);
+  vsnprintf(logMessageBuffer, sizeof(logMessageBuffer), format, argptr);
+  va_end(argptr);
+
+  // Telnet needs a carriage return before the line feed to display correctly.
+  telnet.print("\r");
+  telnet.print(logMessageBuffer);
+
+  // Serial monitor doesn't need the carriage return.
+  Serial.print(logMessageBuffer);
+}
+
+void onTelnetConnect(String ip) {
+  Serial.printf("\n%6ld [onTelnetConnect] Telnet connection from %s", millis(), ip.c_str());
+  
+  telnet.println("\nWelcome " + telnet.getIP());
+  telnet.println("\nThis is an LCC node with the following configuration;-");
+
+  telnet.println("\n            Model: " + String(MODEL));
+  char charNodeID[30] = "";
+  sprintf(charNodeID, "%02X.%02X.%02X.%02X.%02X.%02X", nodeid.val[0], nodeid.val[1], nodeid.val[2], nodeid.val[3], nodeid.val[4], nodeid.val[5]);
+
+  telnet.println("          Node ID: " + String(charNodeID));
+  telnet.println(" Software version: " + String(SWVERSION));
+  telnet.println(" Compilation date: " + String(__DATE__));
+  telnet.println(" Compilation time: " + String(__TIME__));
+
+  telnet.println("\n(Use CTRL+] + q  to disconnect.)");
+}
+
+void onTelnetDisconnect(String ip) {
+  Serial.printf("\n%6ld [onTelnetDisconnect] Telnet connection from %s closed", millis(), ip.c_str());
+}
+
+void initialiseTelnet() {
+  telnet.begin();
+
+  telnet.onConnect(onTelnetConnect);
+  telnet.onDisconnect(onTelnetDisconnect);
+
+  Serial.printf("\n%6ld Telnet server started", millis());
+}
+
 // ==== Setup does initial configuration ======================
 void setup() {
   Serial.begin(115200);
@@ -1020,6 +1045,7 @@ void setup() {
   initialiseFrogs();
   initialiseTOTIs();
   initialiseI2C();
+  initialiseTelnet();
 
   Serial.printf("\n%6ld Initialisation finished", millis());
 }
@@ -1046,6 +1072,9 @@ void loop() {
   for (uint8_t i=0; i<NUM_TOTI; i++) {
     toti[i]->loop();
   }
+
+  // Process any telnet actions.
+  telnet.loop();
 
   /**
    * Connect to the OpenLCB/LCC hub and reconnect if contact has been lost.
