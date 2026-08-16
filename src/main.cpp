@@ -28,9 +28,10 @@
 #include "crossover.h"
 #include "configurationOTA.h"
 #include "configurationPreferences.h"
-#include "ESPTelnet.h"
+// #include "ESPTelnet.h"
 
-ESPTelnet telnet; // Create an instance of the ESPTelnet class
+// ESPTelnet telnet; // Create an instance of the ESPTelnet class
+#include "telnetLCC.h"
 
 // I2C #defines.
 #define I2C_SDA A4
@@ -128,7 +129,7 @@ bool ledConfigHubConnected = false;
 //void initialiseServos();
 void updateServos();
 uint8_t getLEDState(int switchInput);
-void logMessageCallbackFunction(const char* format, ...);
+// void logMessageCallbackFunction(const char* format, ...);
 
 /**
  * Configure servos.
@@ -826,7 +827,8 @@ void initialiseServos() {
     servo[i]->servoEasing.setReachedAngleCallbackFunction(reachedAngleCallbackFunction);
 
     // Set the call back functions for all log message sending.
-    servo[i]->setLogMessageCallbackFunction(logMessageCallbackFunction);
+    // servo[i]->setLogMessageCallbackFunction(logMessageCallbackFunction);
+    servo[i]->setLogMessageCallbackFunction(TelnetLCC::logMessageCallbackFunction);
 
     servo[i]->setTestStopEventIndex(TEST_EVENT_STOP);
 
@@ -955,55 +957,11 @@ NodeID nodeid;
 // The following #include needs nodeid to be already declared.
 #include "OpenLCBMid.h"   // Essential - do not move or delete
 
-/**
- * Telnet callback functions.
- */
-void logMessageCallbackFunction(const char* format, ...) {
-  char logMessageBuffer[200];
-
-  // Format the log message using the provided format and arguments.
-  va_list argptr;
-  va_start(argptr, format);
-  vsnprintf(logMessageBuffer, sizeof(logMessageBuffer), format, argptr);
-  va_end(argptr);
-
-  // Telnet needs a carriage return before the line feed to display correctly.
-  telnet.print("\r");
-  telnet.print(logMessageBuffer);
-
-  // Serial monitor doesn't need the carriage return.
-  Serial.print(logMessageBuffer);
-}
-
-void onTelnetConnect(String ip) {
-  Serial.printf("\n%6ld [onTelnetConnect] Telnet connection from %s", millis(), ip.c_str());
-  
-  telnet.println("\nWelcome " + telnet.getIP());
-  telnet.println("\nThis is an LCC node with the following configuration;-");
-
-  telnet.println("\n            Model: " + String(MODEL));
-  char charNodeID[30] = "";
-  sprintf(charNodeID, "%02X.%02X.%02X.%02X.%02X.%02X", nodeid.val[0], nodeid.val[1], nodeid.val[2], nodeid.val[3], nodeid.val[4], nodeid.val[5]);
-
-  telnet.println("          Node ID: " + String(charNodeID));
-  telnet.println(" Software version: " + String(SWVERSION));
-  telnet.println(" Compilation date: " + String(__DATE__));
-  telnet.println(" Compilation time: " + String(__TIME__));
-
-  telnet.println("\n(Use CTRL+] + q  to disconnect)");
-}
-
-void onTelnetDisconnect(String ip) {
-  Serial.printf("\n%6ld [onTelnetDisconnect] Telnet connection from %s closed", millis(), ip.c_str());
-}
-
 void initialiseTelnet() {
-  telnet.begin();
-
-  telnet.onConnect(onTelnetConnect);
-  telnet.onDisconnect(onTelnetDisconnect);
-
-  Serial.printf("\n%6ld Telnet server started", millis());
+  TelnetLCC::initialiseTelnet();
+  TelnetLCC::setNodeID(nodeid);
+  TelnetLCC::setSWVersion(SWVERSION);
+  TelnetLCC::setModel(MODEL);
 }
 
 // ==== Setup does initial configuration ======================
@@ -1046,6 +1004,10 @@ void setup() {
   initialiseTOTIs();
   initialiseI2C();
   initialiseTelnet();
+  // TelnetLCC::initialiseTelnet();
+  // TelnetLCC::setNodeID(nodeid);
+  // TelnetLCC::setSWVersion(SWVERSION);
+  // TelnetLCC::setModel(MODEL);
 
   Serial.printf("\n%6ld Initialisation finished", millis());
 }
@@ -1074,7 +1036,8 @@ void loop() {
   }
 
   // Process any telnet actions.
-  telnet.loop();
+  // telnet.loop();
+  TelnetLCC::loop();
 
   /**
    * Connect to the OpenLCB/LCC hub and reconnect if contact has been lost.
