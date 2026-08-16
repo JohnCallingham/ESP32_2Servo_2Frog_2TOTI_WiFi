@@ -990,7 +990,7 @@ void onTelnetConnect(String ip) {
   telnet.println(" Compilation date: " + String(__DATE__));
   telnet.println(" Compilation time: " + String(__TIME__));
 
-  telnet.println("\n(Use CTRL+] + q  to disconnect.)");
+  telnet.println("\n(Use CTRL+] + q  to disconnect)");
 }
 
 void onTelnetDisconnect(String ip) {
@@ -1014,7 +1014,7 @@ void setup() {
   delay(1000);
 
   // temp for testing -- allows CoolTerm to be connected.
-  delay(4000);
+  // delay(4000);
 
   Serial.printf("\n%6ld starting program", millis());
   Serial.printf("\n%6ld            Model: ", millis()); Serial.print(MODEL);
