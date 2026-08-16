@@ -997,7 +997,7 @@ void setup() {
   // Create a ConfigurationOTA object and pass in the required parameters.
   ConfigurationOTA configurationOTA;
   configurationOTA.setCredentials(credentials); // A pointer to the credentials data in credentials.h
-  configurationOTA.setTimeout(1000); // The 1000 mS timeout is used when connecting to one of potentially many WiFi hubs as not every WiFi hub may be available
+  configurationOTA.setTimeout(2000); // The 1000 mS timeout is used when connecting to one of potentially many WiFi hubs as not every WiFi hub may be available
   configurationOTA.setCurrentVersion(SWVERSION); // The currently running version of firmware
   configurationOTA.setDefaultNodeID(NodeID(NODE_ADDRESS)); // Used if a Node ID cannot be obtained   ==== required ???? ====
 
