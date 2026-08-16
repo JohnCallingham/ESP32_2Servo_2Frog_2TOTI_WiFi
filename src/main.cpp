@@ -28,6 +28,9 @@
 #include "crossover.h"
 #include "configurationOTA.h"
 #include "configurationPreferences.h"
+#include "ESPTelnet.h"
+
+ESPTelnet telnet; // Create an instance of the ESPTelnet class
 
 // I2C #defines.
 #define I2C_SDA A4
