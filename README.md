@@ -15,6 +15,7 @@ All of the node types which share the common codebase provide the following func
 - Allows the user to configure the ESP32's built in RGB LED to indicate various states of the node.
 - Allows the user to start various testing cycles for the node.
 - Allows for remote configuration and remote firmware updates.
+- Allows for the node to host a telnet server which can be used to display various messages to a telnet client.
 
 ## Specific functionality for this node type
 
@@ -87,6 +88,7 @@ This program uses the following software components;-
 - [LCC_Frog](https://github.com/JohnCallingham/LCC_FROG)
 - [LCC_TOTI](https://github.com/JohnCallingham/LCC_TOTI)
 - [LCC_CONFIGURATION](https://github.com/JohnCallingham/LCC_CONFIGURATION)
+- [LCC_TELNET](https://github.com/JohnCallingham/LCC_TELNET)
 
 The following software components are dependencies of one or more of the above components;-
  - [ArduinoJson](https://github.com/bblanchon/ArduinoJson)
@@ -94,5 +96,6 @@ The following software components are dependencies of one or more of the above c
  - [HW_MUTEX](https://github.com/JohnCallingham/HW_MUTEX)
  - [LCC_NODE_COMPONENT_BASE](https://github.com/JohnCallingham/LCC_NODE_COMPONENT_BASE)
  - [SERVO_EASING](https://github.com/JohnCallingham/SERVO_EASING)
+ - [ESPTelnet](https://github.com/LennartHennigs/ESPTelnet.git)
 
 PlatformIO's Library Dependency Finder handles the downloading of all required dependencies.

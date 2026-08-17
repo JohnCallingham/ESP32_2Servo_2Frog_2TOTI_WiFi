@@ -12,15 +12,9 @@
 // Copyright 2019 Alex Shepherd and David Harris
 //==============================================================
 
-// Debugging -- uncomment to activate debugging statements:
-    // dP(x) prints x, 
-    // dPH(x) prints x in hex, 
-    // dPS(string,x) prints string and x
 #include <Arduino.h>
 #include <Wire.h>
 #include "credentials.h"
-// #include "ESP32WiFiGC_V2.h"
-// #include "ESP32WiFiGC_V3.h"
 #include "ESP32WiFiGC_V4.h"
 #include "servo_lcc.h"
 #include "frog.h"
@@ -28,9 +22,6 @@
 #include "crossover.h"
 #include "configurationOTA.h"
 #include "configurationPreferences.h"
-// #include "ESPTelnet.h"
-
-// ESPTelnet telnet; // Create an instance of the ESPTelnet class
 #include "telnetLCC.h"
 
 // I2C #defines.
@@ -1004,10 +995,6 @@ void setup() {
   initialiseTOTIs();
   initialiseI2C();
   initialiseTelnet();
-  // TelnetLCC::initialiseTelnet();
-  // TelnetLCC::setNodeID(nodeid);
-  // TelnetLCC::setSWVersion(SWVERSION);
-  // TelnetLCC::setModel(MODEL);
 
   Serial.printf("\n%6ld Initialisation finished", millis());
 }
@@ -1036,7 +1023,6 @@ void loop() {
   }
 
   // Process any telnet actions.
-  // telnet.loop();
   TelnetLCC::loop();
 
   /**
