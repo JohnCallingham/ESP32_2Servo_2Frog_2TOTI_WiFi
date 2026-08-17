@@ -867,6 +867,8 @@ void initialiseCrossover() {
 
   crossover.setSendEventCallbackFunction(sendEventCallbackFunction);
 
+  crossover.setLogMessageCallbackFunction(TelnetLCC::logMessageCallbackFunction);
+
   crossover.setTestStartEventIndex(TEST_EVENT_CROSSOVER);
   crossover.setTestStopEventIndex(TEST_EVENT_STOP);
 }
@@ -885,6 +887,8 @@ void initialiseFrogs() {
                       FROG_EVENT_BASE + (i*4) + 2,
                       FROG_EVENT_BASE + (i*4) + 3);
     frog[i]->setTestStopEventIndex(TEST_EVENT_STOP);
+
+    frog[i]->setLogMessageCallbackFunction(TelnetLCC::logMessageCallbackFunction);
 
     // frog[i]->print();
   }
@@ -909,6 +913,7 @@ void initialiseTOTIs() {
 
     toti[i]->setTestStopEventIndex(TEST_EVENT_STOP);
 
+    toti[i]->setLogMessageCallbackFunction(TelnetLCC::logMessageCallbackFunction);
     // toti[i]->print();
   }
 
