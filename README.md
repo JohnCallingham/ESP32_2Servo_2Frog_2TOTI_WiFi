@@ -88,14 +88,14 @@ This program uses the following software components;-
 - [LCC_Frog](https://github.com/JohnCallingham/LCC_FROG)
 - [LCC_TOTI](https://github.com/JohnCallingham/LCC_TOTI)
 - [LCC_CONFIGURATION](https://github.com/JohnCallingham/LCC_CONFIGURATION)
-- [LCC_TELNET](https://github.com/JohnCallingham/LCC_TELNET)
 
 The following software components are dependencies of one or more of the above components;-
- - [ArduinoJson](https://github.com/bblanchon/ArduinoJson)
- - [DEBOUNCE](https://github.com/JohnCallingham/DEBOUNCE)
- - [HW_MUTEX](https://github.com/JohnCallingham/HW_MUTEX)
- - [LCC_NODE_COMPONENT_BASE](https://github.com/JohnCallingham/LCC_NODE_COMPONENT_BASE)
- - [SERVO_EASING](https://github.com/JohnCallingham/SERVO_EASING)
- - [ESPTelnet](https://github.com/LennartHennigs/ESPTelnet.git)
+- [ArduinoJson](https://github.com/bblanchon/ArduinoJson)
+- [DEBOUNCE](https://github.com/JohnCallingham/DEBOUNCE)
+- [HW_MUTEX](https://github.com/JohnCallingham/HW_MUTEX)
+- [SERVO_EASING](https://github.com/JohnCallingham/SERVO_EASING)
+- [LCC_NODE_COMPONENT_BASE](https://github.com/JohnCallingham/LCC_NODE_COMPONENT_BASE)
+- [LCC_TELNET](https://github.com/JohnCallingham/LCC_TELNET)
+- [ESPTelnet](https://github.com/LennartHennigs/ESPTelnet.git)
 
 PlatformIO's Library Dependency Finder handles the downloading of all required dependencies.
