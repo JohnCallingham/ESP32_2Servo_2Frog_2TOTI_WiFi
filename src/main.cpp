@@ -1021,8 +1021,8 @@ void setup() {
   // Delay to allow Serial port to be established.
   delay(1000);
 
-  // temp for testing -- allows CoolTerm to be connected.
-  delay(4000);
+  // // temp for testing -- allows CoolTerm to be connected.
+  // delay(4000);
 
   Serial.printf("\n%6ld starting program", millis());
   Serial.printf("\n%6ld            Model: ", millis()); Serial.print(MODEL);
