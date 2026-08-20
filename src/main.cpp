@@ -929,6 +929,11 @@ void initialiseFrogs() {
   frog[1]->setTestStartEventIndex(TEST_EVENT_FROG2);
 }
 
+// A wrapper function because a class method cannot be the target of a function pointer.
+void totiMenuHandler(int i) {
+  toti[i]->menuHandler();
+}
+
 void initialiseTOTIs() {
   // Store pointers to the TOTI objects in the toti array.
   toti[0] = &toti0;
@@ -945,7 +950,19 @@ void initialiseTOTIs() {
     toti[i]->setTestStopEventIndex(TEST_EVENT_STOP);
 
     toti[i]->setLogMessageCallbackFunction(TelnetLCC::logMessageCallbackFunction);
+
     // toti[i]->print();
+
+    /**
+     * Register telnet menu commands.
+     */
+    TelnetLCC::TelnetMenuCommand command;
+    command.commandLong = "toti" + String(i);
+    command.commandShort = "t" + String(i);
+    command.description = "show data for TOTI " + String(i);
+    command.argument = i;
+    command.handler = totiMenuHandler;
+    TelnetLCC::registerTelnetMenuCommand(command);
   }
 
   toti[0]->setTestStartEventIndex(TEST_EVENT_TOTI1);
