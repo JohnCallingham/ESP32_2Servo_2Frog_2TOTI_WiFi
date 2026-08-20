@@ -18,6 +18,7 @@
 #include "ESP32WiFiGC_V4.h"
 #include "servo_lcc.h"
 #include "frog.h"
+#include "frogHelper.h"
 #include "TOTI.h"
 #include "crossover.h"
 #include "configurationOTA.h"
@@ -904,6 +905,11 @@ void initialiseCrossover() {
   crossover.setTestStopEventIndex(TEST_EVENT_STOP);
 }
 
+// A wrapper function because a class method cannot be the target of a function pointer.
+void frogMenuHandler(String commandShort, int i) {
+  frog[i]->menuHandler(commandShort);
+}
+
 void initialiseFrogs() {
   // Store pointers to the Frog objects in the frog array.
   frog[0] = &frog0;
@@ -921,7 +927,8 @@ void initialiseFrogs() {
 
     frog[i]->setLogMessageCallbackFunction(TelnetLCC::logMessageCallbackFunction);
 
-    // frog[i]->print();
+    // Register telnet menu commands.
+    FrogHelper::registerTelnetMenuCommands(frogMenuHandler, i);
   }
 
   // Initialise the frog testing events.
@@ -930,7 +937,7 @@ void initialiseFrogs() {
 }
 
 // A wrapper function because a class method cannot be the target of a function pointer.
-void totiMenuHandler(int i) {
+void totiMenuHandler(String commandShort, int i) {
   toti[i]->menuHandler();
 }
 
@@ -957,7 +964,6 @@ void initialiseTOTIs() {
      * Register telnet menu commands.
      */
     TelnetLCC::TelnetMenuCommand command;
-    command.commandLong = "toti" + String(i);
     command.commandShort = "t" + String(i);
     command.description = "show data for TOTI " + String(i);
     command.argument = i;
