@@ -180,6 +180,21 @@ TOTI *toti[NUM_TOTI];
 // #include "OpenLCBHeader.h"
 #include "OpenLCBHeaderJC.h"
 
+
+
+
+// // Was "NodeID nodeid(NODE_ADDRESS);" which was moved here for OpenLCB_Single_Thread version 0.1.19.
+// // The actual value for Node ID is now set in setup() using data from Preferences or
+// // uses NODE_ADDRESS if not available in Preferences.
+// NodeID nodeid;
+
+// // The following #include needs nodeid to be already declared.
+// #include "OpenLCBMid.h"   // Essential - do not move or delete
+
+
+
+
+
 // CDI (Configuration Description Information) in xml, must match MemStruct
 // See: http://openlcb.com/wp-content/uploads/2016/02/S-9.7.4.1-ConfigurationDescriptionInformation-2016-02-06.pdf
 extern "C" {
@@ -521,6 +536,23 @@ uint8_t protocolIdentValue[6] = {   //0xD7,0x58,0x00,0,0,0};
 
 #define OLCB_NO_BLUE_GOLD
 
+
+
+
+
+// Was "NodeID nodeid(NODE_ADDRESS);" which was moved here for OpenLCB_Single_Thread version 0.1.19.
+// The actual value for Node ID is now set in setup() using data from Preferences or
+// uses NODE_ADDRESS if not available in Preferences.
+NodeID nodeid;
+
+// The following #include needs nodeid to be already declared.
+#include "OpenLCBMid.h"   // Essential - do not move or delete
+
+
+
+
+
+
 // This is called to initialize the EEPROM during Factory Reset.
 void userInitAll()
 {
@@ -672,7 +704,6 @@ void pceCallback(uint16_t index) {
 
 void userSoftReset() {}
 void userHardReset() {}
-
 
 // Callback from a Configuration write
 // Use this to detect changes in the node's configuration
@@ -939,19 +970,19 @@ void initialiseI2C() {
   uint8_t error = Wire.endTransmission();
 
   if (!error) {
-    Serial.printf("\n%6ld I2C device found at address %02x", millis(), address);
+    Serial.printf("\n%6ld I2C device found at address 0x%02x", millis(), address);
   } else {
-    Serial.printf("\n%6ld No I2C device found at address %02x", millis(), address);
+    Serial.printf("\n%6ld No I2C device found at address 0x%02x", millis(), address);
   }
 }
 
-// Was "NodeID nodeid(NODE_ADDRESS);" which was moved here for OpenLCB_Single_Thread version 0.1.19.
-// The actual value for Node ID is now set in setup() using data from Preferences or
-// uses NODE_ADDRESS if not available in Preferences.
-NodeID nodeid;
+// // Was "NodeID nodeid(NODE_ADDRESS);" which was moved here for OpenLCB_Single_Thread version 0.1.19.
+// // The actual value for Node ID is now set in setup() using data from Preferences or
+// // uses NODE_ADDRESS if not available in Preferences.
+// NodeID nodeid;
 
-// The following #include needs nodeid to be already declared.
-#include "OpenLCBMid.h"   // Essential - do not move or delete
+// // The following #include needs nodeid to be already declared.
+// #include "OpenLCBMid.h"   // Essential - do not move or delete
 
 void initialiseTelnet() {
   TelnetLCC::initialiseTelnet();
@@ -968,7 +999,7 @@ void setup() {
   delay(1000);
 
   // temp for testing -- allows CoolTerm to be connected.
-  // delay(4000);
+  delay(4000);
 
   Serial.printf("\n%6ld starting program", millis());
   Serial.printf("\n%6ld            Model: ", millis()); Serial.print(MODEL);
