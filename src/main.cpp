@@ -21,6 +21,7 @@
 #include "frogHelper.h"
 #include "TOTI.h"
 #include "crossover.h"
+#include "crossoverHelper.h"
 #include "configurationOTA.h"
 #include "configurationPreferences.h"
 #include "telnetLCC.h"
@@ -863,27 +864,23 @@ void initialiseServos() {
   servo[1]->setTestStartEventIndex(TEST_EVENT_SERVO2);
 }
 
+// A wrapper function because a class method cannot be the target of a function pointer.
+void crossoverMenuHandler(String commandShort, int i) {
+  crossover.menuHandler(commandShort);
+}
+
 void initialiseCrossover() {
   // Add position 0 (Thrown).
   crossover.addPosition(
         POS_CR_THROWN, "Thrown",
         CROSSOVER_EVENT_BASE + 0,
-        // CROSSOVER_EVENT_BASE + 1,
-        // CROSSOVER_EVENT_BASE + 2,
-        // CROSSOVER_EVENT_BASE + 3);
         CROSSOVER_EVENT_BASE + 1,
         CROSSOVER_EVENT_BASE + 2);
 
   // Add position 1 (Closed).
   crossover.addPosition(
-        POS_CR_CLOSED, "Closed", // TO DO: Changed from POS_CLOSED. To be tested.
-        // POS_CLOSED, "Closed", // TO DO: Changed from POS_CLOSED. To be tested.
-        // CROSSOVER_EVENT_BASE + 4,
-        // CROSSOVER_EVENT_BASE + 5,
-        // CROSSOVER_EVENT_BASE + 6,
-        // CROSSOVER_EVENT_BASE + 7);
+        POS_CR_CLOSED, "Closed",
         CROSSOVER_EVENT_BASE + 3,
-        // CROSSOVER_EVENT_BASE + 4,
         CROSSOVER_EVENT_BASE + 4,
         CROSSOVER_EVENT_BASE + 5);
   
@@ -903,6 +900,9 @@ void initialiseCrossover() {
 
   crossover.setTestStartEventIndex(TEST_EVENT_CROSSOVER);
   crossover.setTestStopEventIndex(TEST_EVENT_STOP);
+
+  // Register telnet menu commands.
+  CrossoverHelper::registerTelnetMenuCommands(crossoverMenuHandler, 0);
 }
 
 // A wrapper function because a class method cannot be the target of a function pointer.
@@ -1047,13 +1047,13 @@ void setup() {
   // Initialise Olcb with the node id from Preferences.
   Olcb_init(nodeid, RESET_TO_FACTORY_DEFAULTS);
 
+  initialiseTelnet();
   initialiseRGBLEDs();
   initialiseServos();
   initialiseCrossover();
   initialiseFrogs();
   initialiseTOTIs();
   initialiseI2C();
-  initialiseTelnet();
 
   Serial.printf("\n%6ld Initialisation finished", millis());
 }
