@@ -42,7 +42,7 @@
 #define MANU "J Callingham"  // The manufacturer of node
 #define MODEL "ESP32_2Servo_2Frog_2TOTI_Wifi" // The model of the board
 #define HWVERSION "0.1"   // Hardware version
-#define SWVERSION "1.1.1"   // Software version
+#define SWVERSION "1.2.0"   // Software version
 
 // To Reset the Node Number, Uncomment and edit the next line
 // Need to do this at least once.  
@@ -90,7 +90,7 @@
 #define TEST_EVENT_STOP   ((TEST_EVENT_BASE) + 7)
 #define NUM_TEST_EVENT    8 // 7 x test on and 1 x test off.
 
-#define NUM_EVENT (NUM_SERVO_EVENT) + (NUM_CROSSOVER_EVENT) + (NUM_FROG_EVENT) + (NUM_TOTI_EVENT) + (NUM_TEST_EVENT)
+#define NUM_EVENT (NUM_SERVO_EVENT) + (NUM_CROSSOVER_EVENT) + (NUM_FROG_EVENT) + (NUM_TOTI_EVENT) + (NUM_TEST_EVENT) + 1 // One added for SoD.
 
 #define DESCRIPTION_LENGTH 16
 
@@ -122,6 +122,7 @@ bool ledConfigHubConnected = false;
 //void initialiseServos();
 void updateServos();
 uint8_t getLEDState(int switchInput);
+void sendInitialEvents();
 // void logMessageCallbackFunction(const char* format, ...);
 
 /**
@@ -414,6 +415,13 @@ const char configDefInfo[] PROGMEM =
       </eventid>
     </group>
 
+    <group>
+      <hints><visibility hideable='yes' hidden='yes' ></visibility></hints>
+      <name>Start of Day</name>
+      <description>Receiving this event will cause the node to send events indicating its current state.</description>
+      <eventid><name>Start of Day Event</name></eventid>
+    </group>
+
   )" CDIfooter;
 // ===== Enter User definitions above =====
 } // end extern
@@ -486,6 +494,8 @@ typedef struct {
   EventID testStartTOTI2;
   EventID testAllStop;
 
+  EventID StartOfDay;
+
   // ===== Enter User definitions above =====
 } MemStruct;       // type definition
 
@@ -519,7 +529,8 @@ extern "C" {
       CEID(testStartCrossover),
       CEID(testStartFrog1), CEID(testStartFrog2),
       CEID(testStartTOTI1), CEID(testStartTOTI2),
-      CEID(testAllStop)
+      CEID(testAllStop),
+      CEID(StartOfDay)
     };
     
     // SNIP Short node description for use by the Simple Node Information Protocol
@@ -658,6 +669,8 @@ void pceCallback(uint16_t index) {
   // Invoked when an event is consumed; drive pins as needed
   // from index of all events.
   Serial.printf("\n%6ld pceCallback() called with index=0x%02X", millis(), index);
+
+  if (index == 0x39) sendInitialEvents();
 
   // Determine if this event index is for one of the Servo objects.
   for (uint8_t i=0; i<NUM_SERVO; i++) {
@@ -1021,8 +1034,8 @@ void setup() {
   // Delay to allow Serial port to be established.
   delay(1000);
 
-  // // temp for testing -- allows CoolTerm to be connected.
-  // delay(4000);
+  // temp for testing -- allows CoolTerm to be connected.
+  delay(4000);
 
   Serial.printf("\n%6ld starting program", millis());
   Serial.printf("\n%6ld            Model: ", millis()); Serial.print(MODEL);
