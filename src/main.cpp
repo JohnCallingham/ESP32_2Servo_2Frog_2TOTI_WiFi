@@ -42,7 +42,7 @@
 #define MANU "J Callingham"  // The manufacturer of node
 #define MODEL "ESP32_2Servo_2Frog_2TOTI_Wifi" // The model of the board
 #define HWVERSION "0.1"   // Hardware version
-#define SWVERSION "1.2.0"   // Software version
+#define SWVERSION "1.2.1"   // Software version
 
 // To Reset the Node Number, Uncomment and edit the next line
 // Need to do this at least once.  
@@ -1035,7 +1035,7 @@ void setup() {
   delay(1000);
 
   // temp for testing -- allows CoolTerm to be connected.
-  delay(4000);
+  // delay(4000);
 
   Serial.printf("\n%6ld starting program", millis());
   Serial.printf("\n%6ld            Model: ", millis()); Serial.print(MODEL);
@@ -1056,6 +1056,8 @@ void setup() {
   // Update nodeid according to the Node ID stored in Preferences.
   // If there is no Node ID stored, then use the default of NODE_ADDRESS.
   nodeid = ConfigurationPreferences::getNodeID(NodeID(NODE_ADDRESS));
+
+  Serial.printf("\n%6ld Using nodeID.val[5]: 0x%02X", millis(), nodeid.val[5]);
 
   // Initialise Olcb with the node id from Preferences.
   Olcb_init(nodeid, RESET_TO_FACTORY_DEFAULTS);
