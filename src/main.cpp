@@ -42,7 +42,7 @@
 #define MANU "J Callingham"  // The manufacturer of node
 #define MODEL "ESP32_2Servo_2Frog_2TOTI_Wifi" // The model of the board
 #define HWVERSION "0.1"   // Hardware version
-#define SWVERSION "1.2.3"   // Software version
+#define SWVERSION "1.2.4"   // Software version
 
 // To Reset the Node Number, Uncomment and edit the next line
 // Need to do this at least once.  
@@ -699,8 +699,19 @@ void pceCallback(uint16_t index) {
     // The Crossover object has this event index.
     Serial.printf("\n%6ld index 0x%02X belongs to the crossover", millis(), index);
 
-    // Drive the crossover as required.
-    crossover.eventReceived(index);
+    /**
+     * Intercept the crossover event to check if it is a move event.
+     * If it is a move event, then check both TOTIs.
+     * If either TOTI shows occupied, then don't send the event to the crossover,
+     *  but return an event indicating the reached event for the crossover's current position.
+     */
+    // All consumed events are move events.
+    if ((toti[0]->isOccupied()) || (toti[1]->isOccupied())) {
+      OpenLcb.produce(crossover.getReachedEventForCurrentPosition());
+    } else {
+      // Drive the servo as required.
+      crossover.eventReceived(index);
+    }
   }
 
   // Determine if this event index is for one of the Frog objects.
