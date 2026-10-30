@@ -670,7 +670,7 @@ void pceCallback(uint16_t index) {
   // from index of all events.
   Serial.printf("\n%6ld pceCallback() called with index=0x%02X", millis(), index);
 
-  if (index == 0x39) sendInitialEvents();
+  if (index == 0x39) sendInitialEvents(); // Start of Day event.
 
   // Determine if this event index is for one of the Servo objects.
   for (uint8_t i=0; i<NUM_SERVO; i++) {
@@ -678,9 +678,19 @@ void pceCallback(uint16_t index) {
       // This Servo object has this event index.
       Serial.printf("\n%6ld index 0x%02X belongs to servo %d", millis(), index, i);
 
-      // Drive the servo as required.
-      // Serial.printf("\ncalling eventReceived()");
-      servo[i]->eventReceived(index);
+      /**
+       * Intercept the servo event to check if it is a move event.
+       * If it is a move event, then check the corresponding TOTI.
+       * If the corresponding TOTI shows occupied, then don't send the event to the servo,
+       *  but return an event indicating the reached event for the servo's current position.
+       */
+      // All consumed events are move events.
+      if (toti[i]->isOccupied()) {
+        OpenLcb.produce(servo[i]->getReachedEventForCurrentAngle());
+      } else {
+        // Drive the servo as required.
+        servo[i]->eventReceived(index);
+      }
     }
   }
 
